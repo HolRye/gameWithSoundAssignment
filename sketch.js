@@ -62,7 +62,7 @@ function setupSoundtrack() {
 
   squishSynth = new Tone.Synth({
     oscillator: {
-      type: "sine" // You can experiment with different oscillator types for different squish sounds
+      type: "sine" 
     },
     envelope: {
       attack: 0.01,
@@ -74,7 +74,7 @@ function setupSoundtrack() {
 
   missSynth = new Tone.Synth({
     oscillator: {
-      type: "square" // You can experiment with different oscillator types for different miss sounds
+      type: "square" 
     },
     envelope: {
       attack: 0.01,
@@ -88,7 +88,7 @@ function setupSoundtrack() {
 
     dingSynth = new Tone.Synth({
     oscillator: {
-      type: "triangle" // Adjust oscillator type as needed
+      type: "triangle" 
     },
     envelope: {
       attack: 0.01,
@@ -130,7 +130,7 @@ function setup() {
 function draw() {
   image(stoneFloor, width / 2, height / 2, width, height);
 
-  // Display bugs squished and remaining time
+  
   fill(0);
   textSize(16);
   textAlign(RIGHT, TOP);
@@ -140,26 +140,26 @@ function draw() {
   textAlign(LEFT, TOP);
   text("Time: " + remainingTime, 10, 10);
 
-  // Draw and move animations
+  
   for (let i = 0; i < animations.length; i++) {
     animations[i].draw();
     animations[i].move(); 
   }
   
-  // Check if the game is over
-  if (remainingTime === 0 && gameOver) { // Corrected condition
-    // Stop all animations
+  
+  if (remainingTime === 0 && gameOver) { 
+    
     for (let i = 0; i < animations.length; i++) {
       animations[i].stop();
     }
 
-    // Play victory melody if not already played
+    
     if (!victoryPlayed) {
       playVictoryMelody();
       victoryPlayed = true;
     }
 
-    // Display "GAME OVER" text box and bugs squished count
+    
     textAlign(CENTER, CENTER);
     textSize(48);
     fill(0, 255, 0); 
@@ -169,13 +169,13 @@ function draw() {
     textSize(24);
     text("Bugs Squished: " + bugsSquished, width / 2, height / 2 + 20);
 
-    // Show play again button
+    
     playAgainButton.show();
     
-    // Set game over flag to true
+    
     gameOver = true;
   } else if (remainingTime > 0) {
-    // Hide play again button if the game is not over
+    
     playAgainButton.hide();
   }
 }
@@ -183,9 +183,9 @@ function draw() {
 
 
   function playVictoryMelody() {
-    const initialVictoryTempo = 120; // Set the initial tempo for the victory melody
+    const initialVictoryTempo = 120; 
   
-    // Adjust the Transport tempo to the initial victory tempo
+    
     Tone.Transport.bpm.value = initialVictoryTempo;
   
     const victoryMelody = [
@@ -203,51 +203,51 @@ function draw() {
       timeOffset += Tone.Time(note.duration).toSeconds();
     });
   
-    // Restore the original Transport tempo
+    
     Tone.Transport.bpm.value = initialTempo;
   }
   
   
 
   function playSquishSound() {
-    squishSynth.triggerAttackRelease("A4", "8n"); // Adjust note and duration as needed
+    squishSynth.triggerAttackRelease("A4", "8n"); 
   }
 
   function playMissSound() {
-    missSynth.triggerAttackRelease("G3", "8n"); // Adjust note and duration as needed
+    missSynth.triggerAttackRelease("G3", "8n"); 
   }
 
   function playDingSound() {
-    dingSynth.triggerAttackRelease("C5", "16n"); // Adjust note and duration as needed
+    dingSynth.triggerAttackRelease("C5", "16n"); 
   }
 
   function restartGame() {
     playDingSound();
-    // Reset game variables
+    
     bugsSquished = 0;
     remainingTime = 35;
     gameOver = false;
     squishedSprites = [];
-    victoryPlayed = false; // Reset victory flag
+    victoryPlayed = false; 
     
-    // Stop the current soundtrack and clear any scheduled events
+    
     loop.stop();
     Tone.Transport.stop();
     Tone.Transport.cancel();
   
-    // Reset initial tempo
-    initialTempo = 120; // Assuming the initial tempo is 120 BPM
+    
+    initialTempo = 120; 
     Tone.Transport.bpm.value = initialTempo;
   
-    // Clear any scheduled events
+    
     Tone.Transport.cancel();
   
-    // Restart animations
+    
     for (let i = 0; i < animations.length; i++) {
       animations[i].restart();
     }
   
-    // Restart the soundtrack
+    
     loop.start(0);
     Tone.Transport.start();
   }
@@ -293,20 +293,20 @@ function updateTimer() {
   if (!gameOver && remainingTime > 0) {
     remainingTime--;
 
-    // Check if the remaining time is divisible by 5 and increase tempo accordingly
+    
     if (remainingTime % 5 === 0) {
       initialTempo *= tempoMultiplier;
       Tone.Transport.bpm.value *= tempoMultiplier;
     }
   } else if (remainingTime === 0 && !gameOver) {
-    Tone.Transport.stop(); // Stop the Tone.js Transport
+    Tone.Transport.stop(); 
     Tone.Transport.cancel();
-    gameOver = true; // Set gameOver flag to true to prevent further updates
+    gameOver = true; 
     
-    // Reset tempo multiplier and initial tempo
+    
     tempoMultiplier = 1.3;
     initialTempo = 2;
-    Tone.Transport.bpm.value = initialTempo * 60; // Convert tempo to bpm
+    Tone.Transport.bpm.value = initialTempo * 60; 
   }
 }
 
